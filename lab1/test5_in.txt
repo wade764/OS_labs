@@ -1,0 +1,8 @@
+fork Wade 7 kernel_process
+fork Colin 18 Joe
+kill Joe
+printprocs
+printppid Colin
+fork James 2 Colin
+fork Wade 10 Wade
+printprocs
