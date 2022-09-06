@@ -1,13 +1,13 @@
 CC = gcc
 CFLAGS = -g -Wall
 
-default: killme
+default: my_kill
 
-killme: killme.o
-	$(CC) $(CFLAGS) -o killme killme.o
+my_kill: my_kill.o
+	$(CC) $(CFLAGS) -o my_kill killme.o
 
-killme.o: killme.c
-	$(CC) $(CFLAGS) -c killme.c
+my_kill.o: my_kill.c
+	$(CC) $(CFLAGS) -c my_kill.c
 
 clean:
-	rm -f killme *.o
+	rm -f my_kill *.o
