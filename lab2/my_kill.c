@@ -13,19 +13,11 @@
 
 #define FN_LEN 256
 
+bool isAPid = false;
+
 struct Options {
     bool using_h; // -h, human readable
     bool using_f; // -f, has a file optarg
-
-    //bool using_1; // added this line to account for a proccess id
-    //bool using_2; // added this line to account for a proccess id
-    //bool using_3; // added this line to account for a proccess id
-    //bool using_4; // added this line to account for a proccess id
-    //bool using_5; // added this line to account for a proccess id
-    //bool using_6; // added this line to account for a proccess id
-    //bool using_7; // added this line to account for a proccess id
-    //bool using_8; // added this line to account for a proccess id
-    //bool using_9; // added this line to account for a proccess id
 
     char filename[FN_LEN]; // -f optarg
 
@@ -36,18 +28,6 @@ struct Options {
 static void init_opts(struct Options* opts) {
     opts->using_h = false;
     opts->using_f = false;
-
-    //char empty_string[] = "\0";
-
-    //opts->using_1 = false;
-    //opts->using_2 = false;
-    //opts->using_3 = false;
-    //opts->using_4 = false;
-    //opts->using_5 = false;
-    //opts->using_6 = false;
-    //opts->using_7 = false;
-    //opts->using_8 = false;
-    //opts->using_9 = false;
 
     for (int i = 0; i < FN_LEN; i++)
         opts->filename[i] = 0;
@@ -65,6 +45,9 @@ struct Options get_opts(int count, char* args[]) {
     init_opts(&opts);
     int opt; 
 
+    //TEST
+    printf("Initialized opts\n");
+
     // variables used in the for loop below
     int count_temp = count;
     char ** args_temp = args;
@@ -73,150 +56,111 @@ struct Options get_opts(int count, char* args[]) {
     // rethinking this approach but at the moment the current code works with input -h -f
     // if you type -0123456789 it will print the number that is pressed but otherwise I am getting additional new lines printed coming from main function
 
-    while ((opt = getopt(count, args, ":fh:")) != -1) { // the optional string before was ":f:had"
+    while ((opt = getopt(count, args, ":f:hd")) != -1) { // the optional string before was ":f:had"
+
+        //TEST
+        printf("This is count: %d, and this is args[1][0]: %c, inside of while\n", count, args[1][0]);
 
         switch (opt) {
             case 'h': opts.using_h = true; break;
 
             case 'f': 
-                      opts.using_f = true; 
-                      strcpy(opts.filename, optarg);
-                      break;
+                      opts.using_f = true;
 
-                      //case atoi(args): opts.using_0 = true; break;
-                      //case "1": opts.using_1 = true; break;
-                      //case "2": opts.using_2 = true; break;
-                      //case "3": opts.using_3 = true; break;
-                      //case "4": opts.using_4 = true; break;
-                      //case "5": opts.using_5 = true; break;
-                      //case "6": opts.using_6 = true; break;
-                      //case "7": opts.using_7 = true; break;
-                      //case "8": opts.using_8 = true; break;
-                      //case "9": opts.using_9 = true; break;
+                      //TEST
+                      printf("Before strcpy() for f\n");
+
+                      strcpy(opts.filename, optarg);
+
+                      //TEST
+                      printf("After strcpy() for f\n");
+                       
+                      break;
             case ':': 
                       printf("-f needs a value\n");
                       break;
             case '?': 
                       printf("Unknown option\n");
-
-                      // **** DO NOT DELETE, uncomment after testing ****
-                      //exit(-1);
+                      exit(-1);
         }
     }
     //TEST
-    //printf("I am outside the for loop\n");
+    printf("I am outside the for loop\n");
 
     // copied and modified from mainargs.c
-
-    //int c = 0;
-    //while(&args_temp[1][c] != NULL) {
-
-    for(/*int d = 0*/; count_temp>1 /*&& &args_temp[1][0] != '-'*/; count_temp--,args_temp++/*, d++*/) { // changed from == '-' to != NULL
-                                                                                                         // my thinking is that the numbers are not led by a - so as long as the string is not NULL it should enter this loop
+    for( ; count_temp>1; count_temp--,args_temp++) {
+        // my thinking is that the numbers are not led by a - so as long as the string is not NULL it should enter this loop
 
         //TEST
-        //printf("I am in the for loop\n");
-        //printf("this is argc: %d this is args_temp[1][0]: %d\n",count_temp, atoi(&args_temp[1][0]));
-
-        //strcat()
-        //strncat() appends to the end with max size
-
-        //switch(args_temp[1][0]) { // this should be args_temp[1][0]
-        //    case '0': strncat(opts.process_id, "0", 127); break;
-        //    case '1': // this must be a char because the args_temp[1][0] holds the ASCII value if the integer not the int itself
-        //              //opts.using_1 = malloc(16*sizeof(char));
-
-        //              //TEST
-        //              //printf("inside switch\n");
-
-        //              //char* one = "1";
-        //              //opts.process_id = "1";
-        //              strncat(opts.process_id, "1", 127);
-        //              break;
-        //    case '2': strncat(opts.process_id, "2", 127); break;
-        //    case '3': strncat(opts.process_id, "3", 127); break;
-        //    case '4': strncat(opts.process_id, "4", 127); break;
-        //    case '5': strncat(opts.process_id, "5", 127); break;
-        //    case '6': strncat(opts.process_id, "6", 127); break;
-        //    case '7': strncat(opts.process_id, "7", 127); break;
-        //    case '8': strncat(opts.process_id, "8", 127); break;
-        //    case '9': strncat(opts.process_id, "9", 127); break;
-        //}
+        printf("I am in the for loop\n");
+        printf("this is argc: %d this is args_temp[1][0]: %d\n",count_temp, atoi(&args_temp[1][0]));
 
         // If it equals a number then we know it is a pid so set it to the string
-        if(args_temp[1][0] == '-' /*|| args_temp[1][0] == 'h' || args_temp[1][0] == 'f'*/) { // do nothing it will increment
+        if(args_temp[1][0] == '-') { // do nothing it will increment
 
             //TEST
-            //printf("I am in the '-' if block\n");
+            printf("I am in the '-' if block\n");
 
         } else {
 
             //TEST
-            //printf("I am in the else block\n");
+            printf("I am in the else block\n");
 
-            //strstr(args_temp[1][0],'0') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            //strstr(args_temp[1][0],'1') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            //strstr(args_temp[1][0],'2') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            //strstr(args_temp[1][0],'3') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            //strstr(args_temp[1][0],'4') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            //strstr(args_temp[1][0],'5') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            //strstr(args_temp[1][0],'6') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            //strstr(args_temp[1][0],'7') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            //strstr(args_temp[1][0],'8') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            //strstr(args_temp[1][0],'9') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+            args_temp[1][0] == '0' ? strcat(opts.process_id, &args_temp[1][0]) : 0; 
+            args_temp[1][0] == '1' ? strcat(opts.process_id, &args_temp[1][0]) : 0; 
+            args_temp[1][0] == '2' ? strcat(opts.process_id, &args_temp[1][0]) : 0; 
+            args_temp[1][0] == '3' ? strcat(opts.process_id, &args_temp[1][0]) : 0; 
+            args_temp[1][0] == '4' ? strcat(opts.process_id, &args_temp[1][0]) : 0; 
+            args_temp[1][0] == '5' ? strcat(opts.process_id, &args_temp[1][0]) : 0; 
+            args_temp[1][0] == '6' ? strcat(opts.process_id, &args_temp[1][0]) : 0; 
+            args_temp[1][0] == '7' ? strcat(opts.process_id, &args_temp[1][0]) : 0; 
+            args_temp[1][0] == '8' ? strcat(opts.process_id, &args_temp[1][0]) : 0; 
+            args_temp[1][0] == '9' ? strcat(opts.process_id, &args_temp[1][0]) : 0;
 
-            args_temp[1][0] == '0' ? strcat(opts.process_id, &args_temp[1][0]/*"0"*/) : 0; 
-            args_temp[1][0] == '1' ? strcat(opts.process_id, &args_temp[1][0]/*"1"*/) : 0; 
-            args_temp[1][0] == '2' ? strcat(opts.process_id, &args_temp[1][0]/*"2"*/) : 0; 
-            args_temp[1][0] == '3' ? strcat(opts.process_id, &args_temp[1][0]/*"3"*/) : 0; 
-            args_temp[1][0] == '4' ? strcat(opts.process_id, &args_temp[1][0]/*"4"*/) : 0; 
-            args_temp[1][0] == '5' ? strcat(opts.process_id, &args_temp[1][0]/*"5"*/) : 0; 
-            args_temp[1][0] == '6' ? strcat(opts.process_id, &args_temp[1][0]/*"6"*/) : 0; 
-            args_temp[1][0] == '7' ? strcat(opts.process_id, &args_temp[1][0]/*"7"*/) : 0; 
-            args_temp[1][0] == '8' ? strcat(opts.process_id, &args_temp[1][0]/*"8"*/) : 0; 
-            args_temp[1][0] == '9' ? strcat(opts.process_id, &args_temp[1][0]/*"9"*/) : 0; 
+            args_temp[1][0] == '0' ? isAPid = true : 0; 
+            args_temp[1][0] == '1' ? isAPid = true : 0; 
+            args_temp[1][0] == '2' ? isAPid = true : 0; 
+            args_temp[1][0] == '3' ? isAPid = true : 0; 
+            args_temp[1][0] == '4' ? isAPid = true : 0; 
+            args_temp[1][0] == '5' ? isAPid = true : 0; 
+            args_temp[1][0] == '6' ? isAPid = true : 0; 
+            args_temp[1][0] == '7' ? isAPid = true : 0; 
+            args_temp[1][0] == '8' ? isAPid = true : 0; 
+            args_temp[1][0] == '9' ? isAPid = true : 0;
         }
-        //break;
     }
 
     //TEST
-    //printf("This is the process_id string: %s\n", opts.process_id);
+    printf("This is the process_id string: %s\n", opts.process_id);
 
-    if(atoi(opts.process_id) == 0) {
-        //if ((count_temp - optind) != 1) {
+    if(!isAPid) { //if ((count_temp - optind) != 1)
         printf("Error - command format is $ my_kill -options pid\n");
         exit(-1);
     }
-    //c++;
-    //}
+
+    isAPid = false;
 
     return opts;
 }
-
-//***
 
 int main(int argc, char *argv[]) {
 
     FILE *fptr;
 
+    //TEST
+    printf("About to call get_opts\n");
+
     struct Options o = get_opts(argc, argv);
+    
+    //TEST
+    printf("Returning from get_opts\n");
+
     printf("%s", opts.using_h ? "Hello World\n" : "" /* print an empty string */ );
 
-    //printf("%s\n", (strcmp(opts.process_id, "1") == 0) ? opts.process_id : "test" /* print an empty string */ );
-
-    //printf("%s", opts.using_1 ? "1/n" : "" /* print an empty string */ );
-    //printf("%s", opts.using_2 ? "2/n" : "" /* print an empty string */ );
-    //printf("%s", opts.using_3 ? "3/n" : "" /* print an empty string */ );
-    //printf("%s", opts.using_4 ? "4/n" : "" /* print an empty string */ );
-    //printf("%s", opts.using_5 ? "5/n" : "" /* print an empty string */ );
-    //printf("%s", opts.using_6 ? "6/n" : "" /* print an empty string */ );
-    //printf("%s", opts.using_7 ? "7/n" : "" /* print an empty string */ );
-    //printf("%s", opts.using_8 ? "8/n" : "" /* print an empty string */ );
-    //printf("%s", opts.using_9 ? "9/n" : "" /* print an empty string */ );
+    //TEST
+    printf("In main before if\n");
 
     if (opts.using_f) {
-        //printf("-f: %s\n", opts.filename);
-
         // ** Added this code to get_opts source: https://www.geeksforgeeks.org/c-program-print-contents-file/
 
         // Open file
@@ -239,32 +183,25 @@ int main(int argc, char *argv[]) {
         // **
     }
 
-    //if (strlen(opts.process_id) != 0) { // if the string is not empty
-    //    for (int i = 0; i < 128; i++) {
-    //        printf("%c",opts.process_id[i]);
-    //    }
-    //    printf("\n");
-    //}
-
-    //for (int i = 0; i < 25; i++)
-    //    sleep(5);
-
-
+    //TEST
+    printf("In main after if\n");
+    
     printf("my_kill pid: %d\n", getpid()); //get my_kill's pid
 
     // This block of code is for the case that you run the program with a flag, it does not account for the filename
     // The goal is that only valid process ids get past this point
     // This block only skips argument variable that start with '-'
-    while (argv[1][0] == '-'){ 
+    
+    //while (argv[1][0] == '-'){ 
 
-        //TEST
-        //printf("argv[1][0] == '-'\n");
+        ////TEST
+        ////printf("argv[1][0] == '-'\n");
 
-        argv++; // incrementing the pointer
-    }
+        //argv++; // incrementing the pointer
+    //}
 
     //int min = 0, max = 9, num = atoi(&argv[1][0]), valid_num = 0; // this was min = 48, max = 57
-    int min = 0, max = 9, num = atoi(opts.process_id), valid_num = 0; // this was min = 48, max = 57
+    //int min = 0, max = 9, num = atoi(opts.process_id), valid_num = 0; // this was min = 48, max = 57
 
     //TEST
     //printf("This is the beginning of the proccess id: %d\n", num);
