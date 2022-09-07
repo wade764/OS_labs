@@ -112,12 +112,12 @@ struct Options get_opts(int count, char* args[]) {
     //int c = 0;
     //while(&args_temp[1][c] != NULL) {
 
-        for(/*int d = 0*/; count_temp>1 && &args_temp[1][0] != NULL; count_temp--,args_temp++/*, d++*/) { // changed from == '-' to != NULL
+        for(/*int d = 0*/; count_temp>1 /*&& &args_temp[1][0] != '-'*/; count_temp--,args_temp++/*, d++*/) { // changed from == '-' to != NULL
         // my thinking is that the numbers are not led by a - so as long as the string is not NULL it should enter this loop
 
             //TEST
-            //printf("I am in the for loop\n");
-            //printf("this is argc: %d this is args_temp[1][0]: %d\n",count_temp, atoi(&args_temp[1][0]));
+            printf("I am in the for loop\n");
+            printf("this is argc: %d this is args_temp[1][0]: %d\n",count_temp, atoi(&args_temp[1][0]));
 
             //strcat()
             //strncat() appends to the end with max size
@@ -144,17 +144,39 @@ struct Options get_opts(int count, char* args[]) {
             //    case '9': strncat(opts.process_id, "9", 127); break;
             //}
 
-            args_temp[1][0] == '0' ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
-            args_temp[1][0] == '1' ? strcat(opts.process_id, &args[1][0]/*"1"*/) : 0; 
-            args_temp[1][0] == '2' ? strcat(opts.process_id, &args[1][0]/*"2"*/) : 0; 
-            args_temp[1][0] == '3' ? strcat(opts.process_id, &args[1][0]/*"3"*/) : 0; 
-            args_temp[1][0] == '4' ? strcat(opts.process_id, &args[1][0]/*"4"*/) : 0; 
-            args_temp[1][0] == '5' ? strcat(opts.process_id, &args[1][0]/*"5"*/) : 0; 
-            args_temp[1][0] == '6' ? strcat(opts.process_id, &args[1][0]/*"6"*/) : 0; 
-            args_temp[1][0] == '7' ? strcat(opts.process_id, &args[1][0]/*"7"*/) : 0; 
-            args_temp[1][0] == '8' ? strcat(opts.process_id, &args[1][0]/*"8"*/) : 0; 
-            args_temp[1][0] == '9' ? strcat(opts.process_id, &args[1][0]/*"9"*/) : 0; 
-            
+            // If it equals a number then we know it is a pid so set it to the string
+            if(args_temp[1][0] == '-') { // do nothing it will increment
+
+                //TEST
+                printf("I am in the '-' if block\n");
+                
+            } else {
+                
+                //TEST
+                printf("I am in the else block\n");
+                
+                strstr(args_temp[1][0],'0') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                strstr(args_temp[1][0],'1') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                strstr(args_temp[1][0],'2') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                strstr(args_temp[1][0],'3') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                strstr(args_temp[1][0],'4') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                strstr(args_temp[1][0],'5') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                strstr(args_temp[1][0],'6') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                strstr(args_temp[1][0],'7') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                strstr(args_temp[1][0],'8') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                strstr(args_temp[1][0],'9') != NULL ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                
+                //args_temp[1][0] == '0' ? strcat(opts.process_id, &args[1][0]/*"0"*/) : 0; 
+                //args_temp[1][0] == '1' ? strcat(opts.process_id, &args[1][0]/*"1"*/) : 0; 
+                //args_temp[1][0] == '2' ? strcat(opts.process_id, &args[1][0]/*"2"*/) : 0; 
+                //args_temp[1][0] == '3' ? strcat(opts.process_id, &args[1][0]/*"3"*/) : 0; 
+                //args_temp[1][0] == '4' ? strcat(opts.process_id, &args[1][0]/*"4"*/) : 0; 
+                //args_temp[1][0] == '5' ? strcat(opts.process_id, &args[1][0]/*"5"*/) : 0; 
+                //args_temp[1][0] == '6' ? strcat(opts.process_id, &args[1][0]/*"6"*/) : 0; 
+                //args_temp[1][0] == '7' ? strcat(opts.process_id, &args[1][0]/*"7"*/) : 0; 
+                //args_temp[1][0] == '8' ? strcat(opts.process_id, &args[1][0]/*"8"*/) : 0; 
+                //args_temp[1][0] == '9' ? strcat(opts.process_id, &args[1][0]/*"9"*/) : 0; 
+            }
             //break;
         }
         //c++;
