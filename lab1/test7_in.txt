@@ -1,4 +1,0 @@
-fork Gusty 6 Gusty
-printprocs
-forl kernel_process 5 kernel_process
-printprocs

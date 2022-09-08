@@ -1,5 +1,0 @@
-fork Wade 3 Wade
-fork Colin 5 kernel_process
-printprocs
-kill kernel_process
-printprocs
