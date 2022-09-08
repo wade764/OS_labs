@@ -4,29 +4,38 @@
 
 /*
 Write a programthatcallsfork().
-Before calling fork(), have the main process access a variable (e.g., x) and set its value to something (e.g., 100). 
-What value is the variable in the child process? 
+Before calling fork(), have the main process access a variable (e.g., x) and set its value to something (e.g., 100).
+What value is the variable in the child process?
 What happens to the variable when both the child and parent change the value of x?
  */
 
-int main(int argc, char *argv[]) {
-    int x = 0;
-    printf("parent/child modify x (pid:%d)\n", (int) getpid());
-    int rc = fork();
-    if (rc < 0) {
-        // fork failed; exit
+int main(int argc, char *argv[])
+{
+    int x = 100;
+
+    printf("This is the value of x before calling fork(): %d\n", x);
+
+    int didIFork = fork();
+    if (didIFork < 0)
+    {
+        // fork returned a negative value indicating that the fork
+        // function failed to create a child process
+
         fprintf(stderr, "fork failed\n");
         exit(1);
-    } else if (rc == 0) {
-        // child (new process)
-        x += 100;
-        printf("child (pid:%d) x = %d\n", (int) getpid(), x);
-        sleep(1);
-    } else {
-        // parent goes down this path (original process)
-        int wc = wait(NULL);
-        x += 200;
-        printf("parent (pid:%d) wc = %d x = %d\n", (int) getpid(), wc, x);
+    }
+    else if (didIFork == 0)
+    {
+        // fork is running the child process
+        printf("Hello Gusty, I am the child process: %d\n", (int)getpid());
+        printf("This is the value of x from the child: %d\n", x);
+    }
+    else
+    {
+        // the return value of fork is greater than 0 and is the parent
+
+        printf("Hello I am the parent: %d\n", (int)getpid());
+        printf("This is the value of x from the parent: %d\n", x);
     }
     return 0;
 }
