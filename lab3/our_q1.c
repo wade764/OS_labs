@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
         // fork is running the child process
         printf("Hello Gusty, I am the child process: %d\n", (int)getpid());
         printf("This is the value of x from the child: %d\n", x);
+        x = 215;
+        printf("The child changed x to: %d\n", x);
     }
     else
     {
@@ -36,6 +38,11 @@ int main(int argc, char *argv[])
 
         printf("Hello I am the parent: %d\n", (int)getpid());
         printf("This is the value of x from the parent: %d\n", x);
+        x = 45;
+        printf("The parent changed x to: %d\n", x);
     }
+
+    
+    printf("This pid: %d, is about to return, x = %d\n",(int) getpid(), x);
     return 0;
 }
