@@ -3,10 +3,10 @@
 #include <unistd.h>
 
 /*
-Write a programthatcallsfork().
-Before calling fork(), have the main process access a variable (e.g., x) and set its value to something (e.g., 100).
-What value is the variable in the child process?
-What happens to the variable when both the child and parent change the value of x?
+   Write a programthatcallsfork().
+   Before calling fork(), have the main process access a variable (e.g., x) and set its value to something (e.g., 100).
+   What value is the variable in the child process?
+   What happens to the variable when both the child and parent change the value of x?
  */
 
 int main(int argc, char *argv[])
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
         printf("The parent changed x to: %d\n", x);
     }
 
-    
+
     printf("This pid: %d, is about to return, x = %d\n",(int) getpid(), x);
     return 0;
 }
