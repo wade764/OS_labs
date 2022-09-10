@@ -10,6 +10,9 @@ Now write a program that uses wait() to wait for the child process to finish in 
 What does wait() return? 
 What happens if you use wait() in the child?
  */
+
+// https://www.geeksforgeeks.org/wait-system-call-c/
+
 int main(int argc, char *argv[]) {
     int rc = fork();
     if (rc < 0) { // fork failed; exit
@@ -23,7 +26,9 @@ int main(int argc, char *argv[]) {
     } else { // parent goes down this path (original process)
         printf("childpid: %d\n", rc);
         int wc = wait(NULL);
-	assert(wc >= 0);
+	assert(wc >= 0); // this function is used for diagnostics in C
+    // https://www.tutorialspoint.com/c_standard_library/c_macro_assert.htm
+
         printf(" goodbye\n");
         printf("waitrc: %d\n", wc);
     }

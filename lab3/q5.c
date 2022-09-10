@@ -23,9 +23,10 @@ int main(int argc, char *argv[]) {
     } else { // parent goes down this path (original process)
         printf("childpid: %d\n", rc);
         int wc = wait(NULL);
-	assert(wc >= 0);
+	assert(wc >= 0); // this function is used for diagnostics in C
+    // https://www.tutorialspoint.com/c_standard_library/c_macro_assert.htm:q
         printf(" goodbye\n");
-        printf("waitrc: %d\n", wc);
+        printf("waitrc: %d\n", wc
     }
     return 0;
 }
