@@ -4,9 +4,14 @@
 #include <string.h>
 #include <unistd.h>
 
+/* Write a program (q2.c) that opens a 
+file (with the open system call) and then calls fork to create a new process.
+*/
+
 int main(int argc, char **argv) {
-    const char *path =
-        "./questionTwo.txt"; // this is the current working directory
+    
+    const char *path = 
+    "./questionTwo.txt"; // this is the current working directory
 
     //int didItOpen = open(path, 0); // passing a null oflag. this runs and causes no issues
     //int didItOpen = open(path, O_RDWR); // passing a read/write oflag, this runs and causes no issues

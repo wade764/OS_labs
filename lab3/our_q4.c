@@ -29,12 +29,34 @@ int main(int argc, char *argv[])
         
         printf("Hello Gusty, I am the child process: %d\n", (int)getpid());
 
-        //execl("/bin/ls", "-lh", "/home", NULL); // running ls -lh ~
-        //execle();
-        execlp("ls", "ls", "-lh", "/home", NULL);
-        //execv();
-        //execvp();
-        //execvpe();
+        // These functions take a NULL parameter as the last entry to note when the end of
+        // the arguments being passed end
+
+        execl("/bin/ls", "-lh", "/home", NULL); // running ls -lh ~
+        
+        // This exec function take an array after the NULL parameter
+        // works on Mac and Linux not sure about Windows on this one
+        char *binaryPath = "/bin/bash";
+        char *arg2 = "echo \"$WORD1 $WORD2 $PHRASE1\"" ;
+        char *const envp[] = {"WORD1=Hello", "WORD2=Gusty", "PHRASE1=This is the execlp() function\n", NULL};
+        execle(binaryPath, binaryPath, "-c", arg2, NULL, envp);
+
+        //execlp("ls", "ls", "-lh", "/home", NULL);
+        
+        // this function works very similar to execl()
+        // instead of passing the arguments you can just pass it the
+        // command line variables
+        //char *args[] = {"/bin/ls", "-lh", "/home", NULL};
+        //execv("/bin/ls", args);
+
+        //char *args[] = {"ls", "-lh", "/home", NULL};
+        //execvp("ls", args);
+        
+        // This function throws an error or warning depending
+        // on the OS but does work
+        // https://linux.die.net/man/3/execvpe
+        //char *args[] = {"ls", "-lh", "/home", NULL};
+        //execvpe("ls", args, NULL);
 
 
         //printf("This is the value of x from the child: %d\n", x);
@@ -47,6 +69,37 @@ int main(int argc, char *argv[])
 
         printf("Hello I am the parent: %d\n", (int)getpid());
         //printf("This is the value of x from the parent: %d\n", x);
+
+        // These functions take a NULL parameter as the last entry to note when the end of
+        // the arguments being passed end
+
+        //execl("/bin/ls", "-lh", "/home", NULL); // running ls -lh ~
+        
+        // This exec function take an array after the NULL parameter
+        // works on Mac and Linux not sure about Windows on this one
+        char *binaryPath = "/bin/bash";
+        char *arg2 = "echo \"$WORD1 $WORD2 $PHRASE1\"" ;
+        char *const envp[] = {"WORD1=Hello", "WORD2=Gusty", "PHRASE1=This is the execlp() function\n", NULL};
+        execle(binaryPath, binaryPath, "-c", arg2, NULL, envp);
+
+        //execlp("ls", "ls", "-lh", "/home", NULL);
+        
+        // this function works very similar to execl()
+        // instead of passing the arguments you can just pass it the
+        // command line variables
+        //char *args[] = {"/bin/ls", "-lh", "/home", NULL};
+        //execv("/bin/ls", args);
+
+        //char *args[] = {"ls", "-lh", "/home", NULL};
+        //execvp("ls", args);
+        
+        // This function throws an error or warning depending
+        // on the OS but does work
+        // https://linux.die.net/man/3/execvpe
+        //char *args[] = {"ls", "-lh", "/home", NULL};
+        //execvpe("ls", args, NULL);
+
+
         //x = 45;
         //printf("The parent changed x to: %d\n", x);
     }
