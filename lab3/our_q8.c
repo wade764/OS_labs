@@ -30,40 +30,77 @@ $ ./q8
 usage: q8 <string>
  */
 
+// NOTES:
+// https://www.geeksforgeeks.org/pipe-system-call/
+
+//int pipe(int fds[2]);
+
+//Parameters :
+//fd[0] will be the fd(file descriptor) for the 
+//read end of pipe.
+//fd[1] will be the fd for the write end of pipe.
+//Returns : 0 on Success.
+//-1 on error.
+
+// stdin == 0
+// stdout == 1
+// stderr == 2
+
 int main(int argc, char *argv[])
 {
-    int x = 100;
 
-    printf("This is the value of x before calling fork(): %d\n", x);
-
-    int didIFork = fork();
-    if (didIFork < 0)
-    {
-        // fork returned a negative value indicating that the fork
-        // function failed to create a child process
-
-        fprintf(stderr, "fork failed\n");
+    // *** Code between these comments came from geeksforgeeks referenced above 
+    char inbuf[16];
+    int p[2], i;
+  
+    if (pipe(p) < 0)
         exit(1);
+  
+    /* continued */
+    /* write pipe */
+  
+    write(p[1], "msg1", 16); // 
+    write(p[1], "msg2", 16);
+    write(p[1], "msg3", 16);
+  
+    for (i = 0; i < 3; i++) {
+        /* read pipe */
+        read(p[0], inbuf, 16);
+        printf("%s\n", inbuf);
     }
-    else if (didIFork == 0)
-    {
-        // fork is running the child process
-        printf("Hello Gusty, I am the child process: %d\n", (int)getpid());
-        printf("This is the value of x from the child: %d\n", x);
-        x = 215;
-        printf("The child changed x to: %d\n", x);
-    }
-    else
-    {
-        // the return value of fork is greater than 0 and is the parent
-
-        printf("Hello I am the parent: %d\n", (int)getpid());
-        printf("This is the value of x from the parent: %d\n", x);
-        x = 45;
-        printf("The parent changed x to: %d\n", x);
-    }
+    // ***
 
 
-    printf("This pid: %d, is about to return, x = %d\n",(int) getpid(), x);
+    int childOne = fork();
+    int childTwo = fork();
+    
+    //if (didIFork < 0)
+    //{
+    //    // fork returned a negative value indicating that the fork
+    //    // function failed to create a child process
+
+    //    fprintf(stderr, "fork failed\n");
+    //    exit(1);
+    //}
+    //else if (didIFork == 0)
+    //{
+    //    // fork is running the child process
+    //    printf("Hello Gusty, I am the child process: %d\n", (int)getpid());
+    //    printf("This is the value of x from the child: %d\n", x);
+    //    x = 215;
+    //    printf("The child changed x to: %d\n", x);
+    //}
+    //else
+    //{
+    //    // the return value of fork is greater than 0 and is the parent
+
+    //    printf("Hello I am the parent: %d\n", (int)getpid());
+    //    printf("This is the value of x from the parent: %d\n", x);
+    //    x = 45;
+    //    printf("The parent changed x to: %d\n", x);
+    //}
+
+
+    //printf("This pid: %d, is about to return, x = %d\n",(int) getpid(), x);
     return 0;
 }
