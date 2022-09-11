@@ -15,20 +15,30 @@ File Descriptors
 
  */
 int main(int argc, char *argv[]) {
+    
     int rc = fork();
+    
     if (rc < 0) { // fork failed; exit
         fprintf(stderr, "fork failed\n");
         exit(1);
+
     } else if (rc == 0) { // child (new process)
+        
         close(1); // close stdout
+        
+        // since STDOUT is closed, printf will return an error code
+        // STDERR is open however so the "hello to the world" will not print
+        // but the "print return: n" will print because its using a different FILENO
         int n = printf("hello to the world");
         fprintf(stderr, "printf return: %d\n", n);
+
     } else { // parent goes down this path (original process)
         printf("childpid: %d\n", rc);
         int wc = wait(NULL);
-	assert(wc >= 0);
+	    assert(wc >= 0);
         printf(" goodbye\n");
         printf("waitrc: %d\n", wc);
     }
+
     return 0;
 }
