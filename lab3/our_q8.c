@@ -48,31 +48,40 @@ usage: q8 <string>
 
 int main(int argc, char *argv[])
 {
+    int i = 0;
+    while(argv != NULL) {
+        printf("This is the argument variable: %s\n", *argv);
+        i++;
+        if(argv[0][i] != 0)
+        argv++;
+    }
 
     // *** Code between these comments came from geeksforgeeks referenced above 
-    char inbuf[16];
-    int p[2], i;
+    
+    //char inbuf[16];
+    //int p[2], i;
   
-    if (pipe(p) < 0)
-        exit(1);
+    //if (pipe(p) < 0)
+    //    exit(1);
   
-    /* continued */
-    /* write pipe */
+    ///* continued */
+    ///* write pipe */
   
-    write(p[1], "msg1", 16); // 
-    write(p[1], "msg2", 16);
-    write(p[1], "msg3", 16);
+    //write(p[1], "msg1", 16); // 
+    //write(p[1], "msg2", 16);
+    //write(p[1], "msg3", 16);
   
-    for (i = 0; i < 3; i++) {
-        /* read pipe */
-        read(p[0], inbuf, 16);
-        printf("%s\n", inbuf);
-    }
+    //for (i = 0; i < 3; i++) {
+    //    /* read pipe */
+    //    read(p[0], inbuf, 16);
+    //    printf("%s\n", inbuf);
+    //}
+    
     // ***
 
 
-    int childOne = fork();
-    int childTwo = fork();
+    //int childOne = fork();
+    //int childTwo = fork();
     
     //if (didIFork < 0)
     //{
@@ -82,25 +91,21 @@ int main(int argc, char *argv[])
     //    fprintf(stderr, "fork failed\n");
     //    exit(1);
     //}
-    //else if (didIFork == 0)
+    //else if (childOne == 0)
     //{
     //    // fork is running the child process
-    //    printf("Hello Gusty, I am the child process: %d\n", (int)getpid());
-    //    printf("This is the value of x from the child: %d\n", x);
-    //    x = 215;
-    //    printf("The child changed x to: %d\n", x);
+    //    printf("I am the eldest child process: %d\n", (int)getpid());
+    
     //}
     //else
     //{
     //    // the return value of fork is greater than 0 and is the parent
 
     //    printf("Hello I am the parent: %d\n", (int)getpid());
-    //    printf("This is the value of x from the parent: %d\n", x);
-    //    x = 45;
-    //    printf("The parent changed x to: %d\n", x);
+    //    
     //}
 
 
-    //printf("This pid: %d, is about to return, x = %d\n",(int) getpid(), x);
+    ////printf("This pid: %d, is about to return, x = %d\n",(int) getpid(), x);
     return 0;
 }
