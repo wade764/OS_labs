@@ -48,12 +48,20 @@ usage: q8 <string>
 
 int main(int argc, char *argv[])
 {
-    int i = 0;
-    while(argv != NULL) {
-        printf("This is the argument variable: %s\n", *argv);
-        i++;
-        if(argv[0][i] != 0)
-        argv++;
+    //int i = argc;
+    //while(i != 0) { // was, argv != 0
+    //    printf("This is argc: %d, and the argv: %s\n", i, *argv);
+    //    i--;
+    //    //if(argv[0][i] != 0)
+    //    argv++;
+    //}
+
+    //TEST
+    printf("this is argv[0] : %s and this is argv[1] : %s\n", argv[0], argv[1]);
+
+    if(argc <= 1) { // the program shall take at minimum 2 commands
+        printf("Please enter an argument ex: ./our_p8 <process name>\n");
+        exit(1);
     }
 
     // *** Code between these comments came from geeksforgeeks referenced above 
