@@ -16,8 +16,10 @@
    string received on the pipe followed by the reverse of the string argument. The following
    demonstrates the running of this program.
 
-   ./q8 gusty
-   Parent of two children connected via pipe. (pid:8587)
+Expected output:
+
+./q8 gusty
+Parent of two children connected via pipe. (pid:8587)
 parentpid:8587 of child1pid:8588 and child2pid:8589
 child 1: pipe reader: (pid:8588)
 child 2: pipe writer: (pid:8589)
@@ -28,7 +30,7 @@ childpid: 8588 finished
 The following demonstrates running the program without the string argument.
 $ ./q8
 usage: q8 <string>
- */
+*/
 
 // NOTES:
 // https://www.geeksforgeeks.org/pipe-system-call/
@@ -57,10 +59,10 @@ int main(int argc, char *argv[])
     //}
 
     // This will exit the program if no additional arguments are passed
-    if(argc <= 1) { // the program shall take at minimum 2 commands
-        printf("usage: q8 <string>\n");
-        exit(1);
-    }
+    //if(argc <= 1) { // the program shall take at minimum 2 commands
+    //    printf("usage: q8 <string>\n");
+    //    exit(1);
+    //}
 
     // *** Code between these comments came from geeksforgeeks referenced above 
 
@@ -89,45 +91,59 @@ int main(int argc, char *argv[])
 
     int p[2]; // in class this was set to two index 0 for stdin and 1 for the child's file
     char *excargv[3];
+    
     pipe(p);
-
+    
+    char filename[80];
+    if (argc == 2)
+        strcpy(filename, argv[1]);
+    else {
+        printf("usage: q8 <string>\n");
+        exit(1);
+        //printf("enter filename: ");
+        //scanf("%s", filename);
+    }
+    
     //int child1pid = 0, child2pid = 0; 
 
     printf("Parent of two children connected via pipe. (pid:%d)\n", (int) getpid());
 
-    // I am not really sure how to get this to work right
-    // the child 1 and 2 pids are kind of cheating at this point but
-    // to match the desired output this is what I have to do because I won't know the
-    // childs pid till it forks, I can only assume
-    printf("parentpid:%d of child1pid:%d and child2pid:%d\n", getpid(), getpid()+1, getpid()+2);
+    int c1Pid = fork();
+    int c2Pid;
 
-    if(fork() == 0) { // calling the first child inside of the if statement
+    if(c1Pid == 0) { // calling the first child inside of the if statement
         printf("child 1: pipe reader: (pid:%d)\n", getpid());
-        //dup2(p[1], 1); // dup pipe write end on top of stdout
+        dup2(p[0], 0); // dup pipe write end on top of stdout
 
         // fd stands for file descriptor
         //close(p[0]);   // close pipe fd's closing stdin
-        //close(p[1]);   // closing stdout
+        close(p[1]);   // closing stdout
 
+        char buf[100];
+        int s = read(p[0], buf, 80);
+        close(p[0]);   // close pipe fd's closing stdin
+        buf[s] = 0; // this was done to add the NUll termination value
+        
         excargv[0] = "echo"; // changed from ls
-        excargv[1] = "gustyCooperytsug"; // changed from 0
+        excargv[1] = buf; //"gustyCooperytsug"; // changed from 0
 
-        execvp(excargv[0], excargv); // This will run cat gustyCooperytsug to p[1]
-                                     //printf("HERE\n");
+        excargv[2] = 0; // setting to NULL
+    
+        execvp(excargv[0], excargv); // This will run echo gustyCooperytsug to p[1]
+        //printf("HERE\n");
 
-                                     // *** Copied from p4.c
+        // *** Copied from p4.c
+        //int wc = wait(NULL);
+        //assert(wc >= 0);
+        // ***
 
-                                     //int wc = wait(NULL);
-                                     //assert(wc >= 0);
-
-                                     // ***
-
-                                     //printf("gustyCooperytsug\n"); // because printf goes to stdout and it is closed it should be piped to the input of the next process 
+        //printf("gustyCooperytsug\n"); // because printf goes to stdout and it is closed it should be piped to the input of the next process 
 
         printf("childpid: %d finished\n", getpid());
     } 
     else {
-        if (fork() == 0) {
+        c2Pid = fork();
+        if (c2Pid == 0) {
             printf("child 2: pipe writer: (pid:%d)\n", getpid());
             //dup2(p[0], 0); // dup pipe read end on top of stdin
 
@@ -153,6 +169,13 @@ int main(int argc, char *argv[])
             printf("childpid: %d finished\n", getpid());
         }
         else { // this block is for the parent process
+
+            // I am not really sure how to get this to work right
+            // the child 1 and 2 pids are kind of cheating at this point but
+            // to match the desired output this is what I have to do because I won't know the
+            // childs pid till it forks, I can only assume
+            printf("parentpid:%d of child1pid:%d and child2pid:%d\n", getpid(), c1Pid, c2Pid);
+
             close(p[0]);
             close(p[1]);
             wait(NULL);

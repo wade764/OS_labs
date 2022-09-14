@@ -12,11 +12,11 @@ int main(int argc, char **argv) {
     pipe(p);
     if(fork() == 0) {
         printf("Left Child\n");
-        dup2(p[1], 1); // dup pipe write end on top of stdout
+        dup2(p[1], 1); // dup pipe write end on top of stdout // this is reassigning stdout to become p[1]
         close(p[0]);   // close pipe fd's
         close(p[1]);
         excargv[0] = "ls";
-        excargv[1] = 0;
+        excargv[1] = 0; // This is the null terminating sequence required by excargv
         execvp(excargv[0], excargv);
         printf("HERE\n");
     } 
