@@ -6,7 +6,10 @@
 #include <assert.h>
 #include <sys/wait.h>
 
-// code copied and modified from p6.c
+/*
+Write a new program (q12.c) that mimics p6.c to be the hardcoded version of the following shell command.
+$ cat p7.c | grep close
+*/
 
 int main(int argc, char **argv) {
     int p[2];
