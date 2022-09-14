@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
     pipe(p);
     if(fork() == 0) {
         printf("Left Child\n");
-        dup2(p[1], 1); // dup pipe write end on top of stdout // this is reassigning stdout to become p[1]
+        dup2(p[1], 1); // dup pipe write end on top of stdout
         close(p[0]);   // close pipe fd's
         close(p[1]);
         excargv[0] = "ls";

@@ -16,7 +16,7 @@
    string received on the pipe followed by the reverse of the string argument. The following
    demonstrates the running of this program.
 
-Expected output:
+   Expected output:
 
 ./q8 gusty
 Parent of two children connected via pipe. (pid:8587)
@@ -50,130 +50,86 @@ usage: q8 <string>
 
 int main(int argc, char *argv[])
 {
-    //// TEST This prints the argument variables for our program
-    //int i = argc;
-    //while(i != 0) { // was, argv != 0
-    //    printf("This is argc: %d, and the argv: %s\n", i, argv[0]);
-    //    i--;
-    //    argv++;
-    //}
 
     // This will exit the program if no additional arguments are passed
-    //if(argc <= 1) { // the program shall take at minimum 2 commands
-    //    printf("usage: q8 <string>\n");
-    //    exit(1);
-    //}
+    if(argc <= 1) { // the program shall take at minimum 2 commands
+        printf("usage: q8 <string>\n");
+        exit(1);
+    }
 
-    // *** Code between these comments came from geeksforgeeks referenced above 
-
-    //char inbuf[16];
-    //int p[2], i;
-
-    //if (pipe(p) < 0)
-    //    exit(1);
-
-    ///* continued */
-    ///* write pipe */
-
-    //write(p[1], "msg1", 16); // 
-    //write(p[1], "msg2", 16);
-    //write(p[1], "msg3", 16);
-
-    //for (i = 0; i < 3; i++) {
-    //    /* read pipe */
-    //    read(p[0], inbuf, 16);
-    //    printf("%s\n", inbuf);
-    //}
-
-    // ***
-
-    // Code below was from p6.c
+    // Code below was from p6.c, but was modified
 
     int p[2]; // in class this was set to two index 0 for stdin and 1 for the child's file
     char *excargv[3];
-    
-    pipe(p);
-    
-    char filename[80];
-    if (argc == 2)
-        strcpy(filename, argv[1]);
-    else {
-        printf("usage: q8 <string>\n");
-        exit(1);
-        //printf("enter filename: ");
-        //scanf("%s", filename);
-    }
-    
-    //int child1pid = 0, child2pid = 0; 
+
+    pipe(p); // This initializes the contents of p to the next filedescriptors available
 
     printf("Parent of two children connected via pipe. (pid:%d)\n", (int) getpid());
 
-    int c1Pid = fork();
-    int c2Pid;
+    int c1Pid = fork(); // calling fork here for the first time
+    int c2Pid, argLen = 0;
 
-    if(c1Pid == 0) { // calling the first child inside of the if statement
+    if(argv[1] != 0) {
+        argLen = strlen(argv[1]);
+    }
+
+    //TEST
+    //printf("This is the strlen of the argument: %d\n", argLen);
+
+    if(c1Pid == 0) {
+
         printf("child 1: pipe reader: (pid:%d)\n", getpid());
-        dup2(p[0], 0); // dup pipe write end on top of stdout
+        dup2(p[1], 1); // dup pipe write end on top of stdout
 
-        // fd stands for file descriptor
-        //close(p[0]);   // close pipe fd's closing stdin
-        close(p[1]);   // closing stdout
+        close(p[0]);
 
-        char buf[100];
-        int s = read(p[0], buf, 80);
-        close(p[0]);   // close pipe fd's closing stdin
-        buf[s] = 0; // this was done to add the NUll termination value
-        
-        excargv[0] = "echo"; // changed from ls
-        excargv[1] = buf; //"gustyCooperytsug"; // changed from 0
+        char *theArg = strdup(argv[1]); // duplicating the argument variable
 
-        excargv[2] = 0; // setting to NULL
-    
-        execvp(excargv[0], excargv); // This will run echo gustyCooperytsug to p[1]
-        //printf("HERE\n");
+        strcat(theArg, "Cooper");
 
-        // *** Copied from p4.c
-        //int wc = wait(NULL);
-        //assert(wc >= 0);
-        // ***
+        write(1, theArg, strlen(theArg)); // writing the argument to stdout
 
-        //printf("gustyCooperytsug\n"); // because printf goes to stdout and it is closed it should be piped to the input of the next process 
+        close(p[1]);
 
-        printf("childpid: %d finished\n", getpid());
-    } 
-    else {
-        c2Pid = fork();
+        // *** ISSUE ON THIS LINE ADDED A LEADING \n TO SORT OF GET IT TO PRINT RIGHT 
+        printf("\nchildpid: %d finished\n", getpid());
+    } else {
+        c2Pid = fork(); // calling the second process via fork()
         if (c2Pid == 0) {
             printf("child 2: pipe writer: (pid:%d)\n", getpid());
-            //dup2(p[0], 0); // dup pipe read end on top of stdin
+            dup2(p[0], 0); // dup pipe read end on top of stdin
 
-            //close(p[0]);   // close pipe fd's
+            char buf[100];
+
+            int r = read(0, buf, 80);
+
             //close(p[1]);
 
+            buf[r] = 0; // ending the buf string with a null terminator
+
+            int i = 0;
+
             //TEST
-            //printf("%d\n", p[1]); 
+            //printf("Before while\n");
 
-            //excargv[0] = "grep";
-            if (argc == 2) { // it will equal atleast 2 because of the if statement at the top of main
-
-                // this line does not make sense for the output requested
-                //excargv[1] = argv[1]; // setting excargv[1] to the first program argument
-
-                excargv[1] = "gustyCooperytsug"; // changed from p1
-            } else {
-                excargv[1] = "gustyCooperytsug"; // changed from p1
+            while(buf[i] != 0){
+                printf("%c",buf[i]);
+                i++;
             }
-            //excargv[2] = 0;
-            //execvp(excargv[0], excargv);
+            i = argLen - 1; // the length of the initial argument
+            do{
+                printf("%c",buf[i]);
+                i--;
+            } while (i >= 0);
+
+            printf("\n");
+
+            //close(p[0]);   // close pipe fd's
 
             printf("childpid: %d finished\n", getpid());
         }
         else { // this block is for the parent process
 
-            // I am not really sure how to get this to work right
-            // the child 1 and 2 pids are kind of cheating at this point but
-            // to match the desired output this is what I have to do because I won't know the
-            // childs pid till it forks, I can only assume
             printf("parentpid:%d of child1pid:%d and child2pid:%d\n", getpid(), c1Pid, c2Pid);
 
             close(p[0]);
