@@ -20,11 +20,15 @@ int main(int argc, char **argv) {
         dup2(p[1], 1); // dup pipe write end on top of stdout
         close(p[0]);   // close pipe fd's
         close(p[1]);
-        excargv[0] = "grep";
-        excargv[1] = "close";
-        excargv[2] = 0;
-        execvp(excargv[0], excargv);
-        printf("close");
+        //excargv[0] = "grep";
+        //excargv[1] = " close";
+        //excargv[1] = 0;
+        //excargv[2] = 0;
+        //execvp(excargv[0], excargv);
+        //printf("close");
+
+        char *args[] = {"grep", "close", NULL};
+        execvp("grep", args);
     } 
     else {
         if (fork() == 0) {
